@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonRegisterTest.Infrastracture.Entities
 {
+    [Table("UserTitle")]
     public class UserTitle
     {
         public UserTitle()

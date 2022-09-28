@@ -50,12 +50,14 @@ namespace PersonRegisterTest.Infrastracture.Repository
 
         public async Task<List<User>> GetUsers()
         {
-            return await _ctx.Users.Include(x => x.UserTitle).Include(x => x.UserType).ToListAsync();
+            return await _ctx.Users.Include(x => x.UserTitle).Include(x => x.UserType).Where(x=>x.IsActive==true).ToListAsync();
         }
 
         public async Task<User> UpdateUser(User user)
         {
-            _ctx.Entry<User>(user).State = EntityState.Modified;
+            _ctx.Entry(user).State = EntityState.Modified;
+            _ctx.Entry(user.UserTitle).State= EntityState.Modified;
+            _ctx.Entry(user.UserType).State=EntityState.Modified;
             await _ctx.SaveChangesAsync();
             return user;
         }

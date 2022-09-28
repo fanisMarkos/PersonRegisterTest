@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using PersonRegisterTest.Infrastracture.DTOs;
+using PersonRegisterTest.Infrastracture.Entities;
 using PersonRegisterTest.Infrastracture.Repository;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PersonRegisterTest.Controllers
 {
@@ -11,43 +11,82 @@ namespace PersonRegisterTest.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepo _repo;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserRepo repo)
+        public UserController(IUserRepo repo,IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
    
 
-        // GET: api/<UserController>
+        
         [HttpGet]
-        public async Task<List<UserListModel>> GetList()
+        public async Task<ActionResult<List<UserDTO>>> GetList()
         {
-            return null;
+            var resultList = await _repo.GetUsers();
+            if(resultList!=null)
+            {
+                var userList = _mapper.Map<List<UserDTO>>(resultList);
+                return Ok(userList);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        // GET api/<UserController>/5
+        
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
-            return "value";
+            var user = await _repo.GetSignleUser(id);
+            if(user!=null)
+            {
+                return Ok(_mapper.Map<UserDTO>(user));
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        
+        [HttpPost("Create")]
+        public async Task<ActionResult> Create([FromBody] UserDTO model)
         {
+            if(ModelState.IsValid)
+            {
+                var user = _mapper.Map<User>(model);
+                await _repo.CreateUser(user);
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        
+        [HttpPut("Update/{id}")]
+        public async Task<ActionResult> Update(int id, [FromBody] UserDTO model)
         {
+            if(ModelState.IsValid)
+            {
+
+                var userModel = _mapper.Map<User>(model);
+                await _repo.UpdateUser(userModel);
+                return Ok(userModel);
+            }
+            return BadRequest();
         }
 
-        // DELETE api/<UserController>/5
+        
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            await _repo.DeleteUser(id);
+            return Ok();
         }
     }
 }

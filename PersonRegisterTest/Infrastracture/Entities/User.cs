@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PersonRegisterTest.Infrastracture.Entities
 {
+    [Table("User")]
     public class User
     {
         [Key]
@@ -13,7 +15,7 @@ namespace PersonRegisterTest.Infrastracture.Entities
 
         public string EmailAddress { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public bool? IsActive { get; set; }
 
