@@ -1,0 +1,38 @@
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-9">
+            <b>Filter by Name: </b> <span><input type="text" [(ngModel)]="filter" (ngModelChange)="filterChange($event)"></span>
+        </div>
+       <div class="col-3 ">
+          <h1><u>Active Users</u></h1>
+       </div>
+   </div>
+   <div class="row">
+    <table class="table table-dark">
+        <thead>
+           <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>EmailAddress</th>
+            <th>BirthDate</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Code</th>
+           </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of filteredList">
+                 <td>{{user.name}}</td>
+                 <td>{{user.surname}}</td>
+                 <td>{{user.emailAddress}}</td>
+                 <td>{{user.birthDate | date:'dd/MM/yyyy'}}</td>
+                 <td>{{user.titleDescription}}</td>
+                 <td>{{user.typeDescription}}</td>
+                 <td>{{user.typeCode}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+   </div>
+</div>
