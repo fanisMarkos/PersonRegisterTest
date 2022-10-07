@@ -33,12 +33,19 @@ export class UserListComponent implements OnInit {
      }
   }
 
+  deleteUser(id:number|undefined):void
+  {
+     this.userService.deleteUser(id).subscribe(next =>{
+      window.location.reload();
+     })
+  }
+
 }
 
 export interface User{
-   id:number
-   userTypeId:number
-   UserTitleId:number
+   id?:number
+   userTypeId?:number
+   UserTitleId?:number
    name?:string
    surname?:string
    emailAddress?:string

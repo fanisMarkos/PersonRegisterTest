@@ -82,7 +82,7 @@ namespace PersonRegisterTest.Controllers
         }
 
         
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             await _repo.DeleteUser(id);
