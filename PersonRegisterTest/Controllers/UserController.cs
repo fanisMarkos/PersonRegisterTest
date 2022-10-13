@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonRegisterTest.Infrastracture.DTOs;
 using PersonRegisterTest.Infrastracture.Entities;
 using PersonRegisterTest.Infrastracture.Repository;
+using PersonRegisterTest.Infrastracture.Services;
 
 namespace PersonRegisterTest.Controllers
 {
@@ -10,83 +11,100 @@ namespace PersonRegisterTest.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepo _repo;
-        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserRepo repo,IMapper mapper)
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
-            _repo = repo;
-            _mapper = mapper;
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-   
 
-        
         [HttpGet]
         public async Task<ActionResult<List<UserDTO>>> GetList()
         {
-            var resultList = await _repo.GetUsers();
-            if(resultList!=null)
+            try
             {
-                var userList = _mapper.Map<List<UserDTO>>(resultList);
-                return Ok(userList);
+                var resultList = await _userService.GetUsersListAsync();
+                return Ok(resultList);
             }
-            else
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest();
             }
         }
 
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
-            var user = await _repo.GetSignleUser(id);
-            if(user!=null)
+            try
             {
-                return Ok(_mapper.Map<UserDTO>(user));
+                var userResult = await _userService.GetUserByIdAsync(id);
+                return Ok(userResult);
             }
-            else
+            catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return NotFound();
             }
         }
 
-        
+
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromBody] UserDTO model)
         {
-            if(ModelState.IsValid)
+            try
             {
-                var user = _mapper.Map<User>(model);
-                await _repo.CreateUser(user);
-                return Ok(user);
+                if(ModelState.IsValid)
+                {
+                    await _userService.CreateUserAsync(model);
+                    return Ok();
+                }
+                return BadRequest();
             }
-            else
+            catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest();
             }
         }
 
-        
+
         [HttpPut("Update/{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UserDTO model)
         {
-            if(ModelState.IsValid)
+            try
             {
-
-                var userModel = _mapper.Map<User>(model);
-                await _repo.UpdateUser(userModel);
-                return Ok(userModel);
+                if(ModelState.IsValid)
+                {
+                    await _userService.UpdateUserAsync(id,model);
+                    return Ok();
+                }
+                return BadRequest();
             }
-            return BadRequest();
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
         }
 
-        
+
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await _repo.DeleteUser(id);
-            return Ok();
+            try
+            {
+                await _userService.DeleteUserAsync(id);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
         }
     }
 }

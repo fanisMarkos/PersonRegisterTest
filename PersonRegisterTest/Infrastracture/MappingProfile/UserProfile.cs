@@ -35,9 +35,7 @@ namespace PersonRegisterTest.Infrastracture.MappingProfile
                 });
 
 
-                //.ForMember(dest => dest.UserTitle.Description, opts => opts.MapFrom(src => src.TitleDescription))
-                //.ForMember(dest => dest.UserType.Description, opts => opts.MapFrom(src => src.TypeDescription))
-                //.ForMember(dest => dest.UserType.Code, opts => opts.MapFrom(src => src.TypeCode));
+               
             
         }
     }

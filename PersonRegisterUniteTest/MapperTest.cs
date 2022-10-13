@@ -18,7 +18,6 @@ namespace PersonRegisterUniteTest
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile<UserProfile>());
             var mapper = config.CreateMapper();
-
             var user = new User() { Id = 1, Name = "test", Surname = "test", EmailAddress = "test" };
             var userDto = mapper.Map<UserDTO>(user);
 

@@ -3,19 +3,6 @@ using PersonRegisterTest.Infrastracture.Entities;
 
 namespace PersonRegisterTest.Infrastracture.Repository
 {
-    public interface IUserRepo
-    {
-        Task<List<User>> GetUsers();
-
-        Task<User> GetSignleUser(int id);
-
-        Task<User> CreateUser(User user); 
-
-        Task<User> UpdateUser(User user);
-
-        Task DeleteUser(int id);
-
-    }
 
     public class UserRepo : IUserRepo
     {
@@ -23,7 +10,7 @@ namespace PersonRegisterTest.Infrastracture.Repository
 
         public UserRepo(UserContext ctx)
         {
-            _ctx = ctx; 
+            _ctx = ctx;
         }
 
         public async Task<User> CreateUser(User user)
@@ -33,14 +20,10 @@ namespace PersonRegisterTest.Infrastracture.Repository
             return user;
         }
 
-        public async Task DeleteUser(int id)
+        public async Task DeleteUser(User userForDelete)
         {
-            var userForDelete = await GetSignleUser(id);
-            if(userForDelete!=null)
-            {
-                userForDelete.IsActive = false;
-                await UpdateUser(userForDelete);
-            }
+            userForDelete.IsActive = false;
+            await UpdateUser(userForDelete);
         }
 
         public async Task<User> GetSignleUser(int id)
@@ -50,14 +33,12 @@ namespace PersonRegisterTest.Infrastracture.Repository
 
         public async Task<List<User>> GetUsers()
         {
-            return await _ctx.Users.Include(x => x.UserTitle).Include(x => x.UserType).Where(x=>x.IsActive==true).ToListAsync();
+            return await _ctx.Users.Include(x => x.UserTitle).Include(x => x.UserType).Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<User> UpdateUser(User user)
         {
-            _ctx.Entry(user).State = EntityState.Modified;
-            _ctx.Entry(user.UserTitle).State= EntityState.Modified;
-            _ctx.Entry(user.UserType).State=EntityState.Modified;
+            _ctx.Users.Update(user);
             await _ctx.SaveChangesAsync();
             return user;
         }
