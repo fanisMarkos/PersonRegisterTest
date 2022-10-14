@@ -16,6 +16,12 @@ namespace PersonRegisterTest.Infrastracture.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Register A User To DB
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>User</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<User> CreateUserAsync(UserDTO model)
         {
             if (model is null)
@@ -25,6 +31,12 @@ namespace PersonRegisterTest.Infrastracture.Services
             return await _repo.CreateUser(_mapper.Map<User>(model));
         }
 
+        /// <summary>
+        /// Soft Delete A User with Is Active
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task DeleteUserAsync(int id)
         {
             var userForDelete = await _repo.GetSignleUser(id);
@@ -39,6 +51,12 @@ namespace PersonRegisterTest.Infrastracture.Services
             
         }
 
+        /// <summary>
+        /// Retrive a User with Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<UserDTO> GetUserByIdAsync(int id)
         {
             var user = await _repo.GetSignleUser(id);
@@ -49,12 +67,23 @@ namespace PersonRegisterTest.Infrastracture.Services
             return _mapper.Map<UserDTO>(user);
         }
 
+        /// <summary>
+        /// Get List of Users
+        /// </summary>
+        /// <returns>List<UserDTO></returns>
         public async Task<List<UserDTO>> GetUsersListAsync()
         {
             var userList = await _repo.GetUsers();
             return  _mapper.Map<List<UserDTO>>(userList);
         }
 
+        /// <summary>
+        /// Update a user in db
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<User> UpdateUserAsync(int id,UserDTO model)
         {
             if(id!=model.Id)
