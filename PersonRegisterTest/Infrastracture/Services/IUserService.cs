@@ -7,12 +7,16 @@ namespace PersonRegisterTest.Infrastracture.Services
     {
         Task<List<UserDTO>> GetUsersListAsync();
 
-        Task<UserDTO> GetUserByIdAsync(int id);
+        Task<UserCreateEditDto> GetUserByIdAsync(int id);
 
-        Task<User> CreateUserAsync(UserDTO model);
+        Task<User> CreateUserAsync(UserCreateEditDto model);
 
-        Task<User> UpdateUserAsync(int id,UserDTO model);
+        Task<User> UpdateUserAsync(int id,UserCreateEditDto model);
 
         Task DeleteUserAsync(int id);
+
+        Task<List<UserTitle>> GetUserTittlesSync();
+
+        Task<List<UserType>> GetUserTypesAsync();
     }
 }

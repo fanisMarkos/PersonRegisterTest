@@ -22,7 +22,7 @@ namespace PersonRegisterTest.Infrastracture.Services
         /// <param name="model"></param>
         /// <returns>User</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task<User> CreateUserAsync(UserDTO model)
+        public async Task<User> CreateUserAsync(UserCreateEditDto model)
         {
             if (model is null)
             {
@@ -57,14 +57,14 @@ namespace PersonRegisterTest.Infrastracture.Services
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task<UserDTO> GetUserByIdAsync(int id)
+        public async Task<UserCreateEditDto> GetUserByIdAsync(int id)
         {
             var user = await _repo.GetSignleUser(id);
             if(user is null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<UserCreateEditDto>(user);
         }
 
         /// <summary>
@@ -77,6 +77,16 @@ namespace PersonRegisterTest.Infrastracture.Services
             return  _mapper.Map<List<UserDTO>>(userList);
         }
 
+        public async Task<List<UserTitle>> GetUserTittlesSync()
+        {
+            return await _repo.GetUserTitles();
+        }
+
+        public async Task<List<UserType>> GetUserTypesAsync()
+        {
+            return await _repo.GetUserTypes();
+        }
+
         /// <summary>
         /// Update a user in db
         /// </summary>
@@ -84,7 +94,7 @@ namespace PersonRegisterTest.Infrastracture.Services
         /// <param name="model"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<User> UpdateUserAsync(int id,UserDTO model)
+        public async Task<User> UpdateUserAsync(int id,UserCreateEditDto model)
         {
             if(id!=model.Id)
             {

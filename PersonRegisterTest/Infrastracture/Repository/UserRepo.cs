@@ -53,6 +53,22 @@ namespace PersonRegisterTest.Infrastracture.Repository
         {
             return await _ctx.Users.Include(x => x.UserTitle).Include(x => x.UserType).Where(x => x.IsActive == true).ToListAsync();
         }
+        /// <summary>
+        /// Get All User Tittle FromDb
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserTitle>> GetUserTitles()
+        {
+            return  await _ctx.UserTitles.ToListAsync();
+        }
+        /// <summary>
+        /// Get ALl UserTypes From Db
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<UserType>> GetUserTypes()
+        {
+            return await _ctx.UserTypes.ToListAsync();
+        }
 
         /// <summary>
         /// 

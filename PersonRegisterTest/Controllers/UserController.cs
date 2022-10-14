@@ -37,7 +37,7 @@ namespace PersonRegisterTest.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetUser(int id)
+        public async Task<ActionResult<UserCreateEditDto>> GetUser(int id)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace PersonRegisterTest.Controllers
 
 
         [HttpPost("Create")]
-        public async Task<ActionResult> Create([FromBody] UserDTO model)
+        public async Task<ActionResult> Create([FromBody] UserCreateEditDto model)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace PersonRegisterTest.Controllers
 
 
         [HttpPut("Update/{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] UserDTO model)
+        public async Task<ActionResult> Update(int id, [FromBody] UserCreateEditDto model)
         {
             try
             {
@@ -99,6 +99,36 @@ namespace PersonRegisterTest.Controllers
             {
                 await _userService.DeleteUserAsync(id);
                 return Ok();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("UserTitles")]
+        public async Task<ActionResult<List<UserTitle>>> GetUserTitles()
+        {
+            try
+            {
+                var userTitles = await _userService.GetUserTittlesSync();
+                return Ok(userTitles);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("UserTypes")]
+        public async Task<ActionResult<List<UserType>>> GetUserTypes()
+        {
+            try
+            {
+                var userTypes = await _userService.GetUserTypesAsync();
+                return Ok(userTypes);
             }
             catch(Exception ex)
             {

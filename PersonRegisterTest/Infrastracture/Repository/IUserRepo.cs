@@ -14,5 +14,9 @@ namespace PersonRegisterTest.Infrastracture.Repository
 
         Task DeleteUser(User userForDelete);
 
+        Task<List<UserTitle>> GetUserTitles();
+
+        Task<List<UserType>> GetUserTypes();
+
     }
 }
